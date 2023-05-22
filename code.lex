@@ -1,0 +1,5 @@
+Keyword(int)
+Identifier(x)
+Keyword(while)
+Identifier(aa)
+Identifier(aaa)

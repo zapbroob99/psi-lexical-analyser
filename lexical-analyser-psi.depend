@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1684748182 source:c:\users\asus\desktop\lexical-analyser-psi\main.c
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+
