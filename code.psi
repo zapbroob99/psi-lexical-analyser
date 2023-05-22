@@ -1,2 +1,6 @@
-hi:=hello+25; /*addition */
-hello++; /*increment*/
+int _NUMBER_4 = 100000000000;
+char c = '$'; "
+
+long_identifier_name_exceeding_max_id_size = 0;
+ +
+

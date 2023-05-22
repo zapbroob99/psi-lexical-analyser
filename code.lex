@@ -1,9 +1,5 @@
-Identifier(hi)
-Operator(:=)
-Identifier(hello)
-Operator(+)
-IntConst(25)
+Keyword(int)
 EndOfLine
-Identifier(hello)
-Operator(++)
+Keyword(char)
+Identifier(c)
 EndOfLine

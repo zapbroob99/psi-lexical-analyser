@@ -135,7 +135,7 @@ int main() {
             }
 
             if (c == EOF) {
-                printf("Error: String constant not terminated at line %d, column %d\n", line, token_start_column);
+                printf("Error: String constant not terminated at the end of file.");
             } else {
                 fprintf(output, "StringConst(%s)\n", string_const);
             }
@@ -208,7 +208,7 @@ int main() {
                     column--;
                 }
             } else if (c == EOF) {
-                printf("Error: Comment not terminated before end of file at line %d, column %d\n", comment_start_line, comment_start_column);
+                printf("Error: Comment not terminated before end of file.");
                 break;
             }
         }
