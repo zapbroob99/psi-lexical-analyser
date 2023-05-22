@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define MAX_ID_SIZE 30
 #define MAX_INT_SIZE 10
@@ -48,7 +49,33 @@ int main() {
     }
 
     char c;
+    int in_string=0;
+    bool in_comment=false;
+    int line = 1;
+    int column = 1;
+    char op[3] = {0};
     while ((c = fgetc(file)) != EOF) {
+        column++;
+        if (c == '\n') {
+            line++;
+            column = 0;
+        }
+        while(in_comment){
+            int
+            c=fgetc(file);
+            if(c=='*'){
+                c=fgetc(file);
+                if(c=='/'){
+                    in_comment = false;
+                } else {
+                    ungetc(c,file);
+                }
+            } else if (c == EOF) {
+                printf("Error: Comment not terminated before end of file\n");
+                break;
+            }
+
+        }
         if(isalpha(c)){
             char identifier[MAX_BUFFER_SIZE+1] = {0};
             int idx=0;
@@ -83,7 +110,47 @@ int main() {
             }
             ungetc(c,file);
         }
-        //TODO: add other things
+        else if(c=='/'){
+            c=fgetc(file);
+             if (c == '*') {  // This is the start of a comment
+                in_comment = true;
+            } else {  // This is not a comment, just a regular '/'
+                ungetc(c, file);  // Put the character back, it will be processed in the next iteration
+            }
+        }
+        else if(strchr("+-*/:", c)){
+            op[0] = c;
+            op[1] = fgetc(file);
+            if ((op[0] == '+' && op[1] == '+') || (op[0] == '-' && op[1] == '-')
+                || (op[0] == ':' && op[1] == '=')){
+                    fprintf(output, "Operator(%c%c)\n", op[0], op[1]);
+                }
+                else{
+                    ungetc(op[1], file);
+                    fprintf(output, "Operator(%c)\n", op[0]);
+                }
+        }
+                else if (c == '(') {
+            fprintf(output, "LeftPar\n");
+        } else if (c == ')') {
+            fprintf(output, "RightPar\n");
+        } else if (c == '{') {
+            fprintf(output, "LeftCurlyBracket\n");
+        } else if (c == '}') {
+            fprintf(output, "RightCurlyBracket\n");
+        } else if (c == '[') {
+            fprintf(output, "LeftSquareBracket\n");
+        } else if (c == ']') {
+            fprintf(output, "RightSquareBracket\n");
+        } else if(c==';'){
+            fprintf(output, "EndOfLine\n");
+        }
+
+
+
+
+
+
 
     }
 
