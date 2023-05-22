@@ -60,22 +60,7 @@ int main() {
             line++;
             column = 0;
         }
-        while(in_comment){
-            int
-            c=fgetc(file);
-            if(c=='*'){
-                c=fgetc(file);
-                if(c=='/'){
-                    in_comment = false;
-                } else {
-                    ungetc(c,file);
-                }
-            } else if (c == EOF) {
-                printf("Error: Comment not terminated before end of file\n");
-                break;
-            }
 
-        }
         if(isalpha(c)){
             char identifier[MAX_BUFFER_SIZE+1] = {0};
             int idx=0;
@@ -110,12 +95,46 @@ int main() {
             }
             ungetc(c,file);
         }
+        else if (isdigit(c)) {
+            char int_const[MAX_INT_SIZE+1] = {0};
+            int idx = 0;
+            do {
+                if (idx < MAX_INT_SIZE) {
+                    int_const[idx++] = c;
+                } else {
+                    idx++;
+                }
+                c = fgetc(file);
+            } while (isdigit(c));
+
+            if (idx > MAX_INT_SIZE) {
+                printf("Error: Integer constant too long at line %d, column %d\n", line, column);
+            } else {
+                fprintf(output, "IntConst(%s)\n", int_const);
+            }
+            ungetc(c, file);
+}
         else if(c=='/'){
-            c=fgetc(file);
+             c=fgetc(file);
              if (c == '*') {  // This is the start of a comment
                 in_comment = true;
             } else {  // This is not a comment, just a regular '/'
                 ungetc(c, file);  // Put the character back, it will be processed in the next iteration
+            }
+        }
+        else if (c == '"') {
+            char string_const[MAX_BUFFER_SIZE+1] = {0};
+            int idx = 0;
+            c = fgetc(file);
+            while (c != '"' && c != EOF) {
+                string_const[idx++] = c;
+                c = fgetc(file);
+            }
+
+            if (c == EOF) {
+                printf("Error: String constant not terminated at line %d, column %d\n", line, column);
+            } else {
+                fprintf(output, "StringConst(%s)\n", string_const);
             }
         }
         else if(strchr("+-*/:", c)){
@@ -130,8 +149,8 @@ int main() {
                     fprintf(output, "Operator(%c)\n", op[0]);
                 }
         }
-                else if (c == '(') {
-            fprintf(output, "LeftPar\n");
+        else if (c == '(') {
+                fprintf(output, "LeftPar\n");
         } else if (c == ')') {
             fprintf(output, "RightPar\n");
         } else if (c == '{') {
@@ -145,12 +164,40 @@ int main() {
         } else if(c==';'){
             fprintf(output, "EndOfLine\n");
         }
+        else if (!isspace(c)) {
+            char buffer[MAX_BUFFER_SIZE+1] = {0};
+            int idx = 0;
 
+            do {
+                if (idx < MAX_BUFFER_SIZE) {
+                    buffer[idx++] = c;
+                } else {
+                    idx++;
+                }
 
+                c = fgetc(file);
+                column++;
 
+            } while (isalnum(c) || c == '_');
 
+            printf("Error: Unrecognized token '%s' at line %d, column %d\n", buffer, line, column - strlen(buffer));
+            ungetc(c, file);
+        }
+        while(in_comment){
+            int c=fgetc(file);
+            if(c=='*'){
+                c=fgetc(file);
+                if(c=='/'){
+                    in_comment = false;
+                } else {
+                    ungetc(c,file);
+                }
+            } else if (c == EOF) {
+                printf("Error: Comment not terminated before end of file\n");
+                break;
+            }
 
-
+        }
 
     }
 
