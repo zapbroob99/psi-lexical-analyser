@@ -1,10 +1,9 @@
 Identifier(hi)
 Operator(:=)
-Identifier(hel)
+Identifier(hello)
 Operator(+)
 IntConst(25)
 EndOfLine
 Identifier(hello)
-Operator(--)
-Operator(-)
+Operator(++)
 EndOfLine

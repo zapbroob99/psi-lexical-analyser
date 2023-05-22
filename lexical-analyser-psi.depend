@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1684759927 source:c:\users\asus\desktop\lexical-analyser-psi\main.c
+1684780833 source:c:\users\asus\desktop\lexical-analyser-psi\main.c
 	<stdio.h>
 	<ctype.h>
 	<string.h>
